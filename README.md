@@ -1,4 +1,4 @@
-![Uploading image.png…]()
+![image](https://github.com/user-attachments/assets/32209944-291a-4bac-9fad-8737c6282539)
 
 # Astro Starter Kit: Minimal
 
