@@ -1,3 +1,5 @@
+![Uploading image.png…]()
+
 # Astro Starter Kit: Minimal
 
 ```sh
