@@ -1,0 +1,62 @@
+---
+import BlogLayout from "../../layouts/BlogLayout.astro";
+import type {GetStaticPaths} from "astro";
+import {getCollection} from "astro:content";
+import {Image} from "astro:assets";
+
+
+export const getStaticPaths = (async () => {
+
+    const posts = await getCollection('blog');
+
+    return posts.map((postEntry) => {
+        //? By default, Astro will generate a slug from the file name
+        const slug = postEntry.slug;
+        return {
+            params: {slug: slug},
+            props: {post: postEntry},
+        }
+    })
+}) satisfies GetStaticPaths;
+
+const {post} = Astro.props;
+const {title, image, author} = post.data; //? This is the data from the entry (Frontmatter)
+
+const {Content, headings} = await post.render();
+---
+
+<BlogLayout title={title}>
+    <h1 class="text-xs text-gray-500 mb-0"> {title} </h1>
+    <h1 class="text-xs text-gray-400 mb-0"> {author} </h1>
+
+    <Image class="object-cover w-full h-56 rounded-lg lg:w-64"
+           transition:name={`${post.slug}-image`}
+           quality="low"
+           src={image}
+           width={600}
+           height={600}
+           loading="lazy"
+           alt="Img"/>
+
+    <!-- Table of Contents -->
+    <h3>Table of Contents</h3>
+    <ol>
+        {
+            headings.map((heading, index) => (
+                    <li>
+                        <a href={`#${heading.slug}`}>
+                            {index + 1} - {heading.text}
+                        </a>
+                    </li>
+            ))
+        }
+    </ol>
+
+
+    <!-- Headings -->
+    <Content/>
+
+    <div class="my-20">
+        <a href="#back-to-home-button">Go top</a>
+    </div>
+</BlogLayout>
